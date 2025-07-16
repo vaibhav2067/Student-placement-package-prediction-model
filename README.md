@@ -2,6 +2,16 @@
 
 This project is a web-based Machine Learning application that predicts a student's expected placement package based on academic and skill-related input data. Built with Flask, scikit-learn, and basic HTML/CSS/JS frontend, the application allows users to upload CSV data, view model evaluation metrics, and make real-time predictions.
 
+---
+
+## Screenshot
+
+![Screenshot](static/1.png) <!-- Replace with actual screenshot path -->
+![Screenshot](static/3.png)  <!-- Replace with actual screenshot path -->
+![Screenshot](static/4.png)  <!-- Replace with actual screenshot path -->
+
+---
+
 ## Features
 
 - **CSV Upload:** Upload your dataset to train models.
@@ -102,7 +112,7 @@ The app will be accessible at `http://127.0.0.1:5000/`
 
 ## Author
 
-- [Your Name / GitHub](https://github.com/vaibhav2067)
+- [Vaibhav / GitHub](https://github.com/vaibhav2067)
 
 ---
 
@@ -115,9 +125,3 @@ This project is licensed under the MIT License.
 ## Note
 
 This is a prototype tool and should not be used for real-world decision-making without further validation and enhancement.
-
----
-
-## Screenshot
-
-![Screenshot](static/screenshot.png)  <!-- Replace with actual screenshot path -->
