@@ -1,45 +1,123 @@
-# Placement Package Prediction Analysis
+# Student Placement Package Prediction
 
-This project involves the analysis of placement package predictions using various machine learning models, including Linear Regression, Multiple Linear Regression, and Artificial Neural Network (ANN). The analysis includes two iterations, each with different training and testing splits.
+This project is a web-based Machine Learning application that predicts a student's expected placement package based on academic and skill-related input data. Built with Flask, scikit-learn, and basic HTML/CSS/JS frontend, the application allows users to upload CSV data, view model evaluation metrics, and make real-time predictions.
 
-## Prerequisites
+## Features
 
-- Python 3.x
-- Required Python packages: `scikit-learn`, `matplotlib`, `pandas`, `tkinter` (for GUI), `numpy`
+- **CSV Upload:** Upload your dataset to train models.
+- **Sample Dataset:** Load a pre-provided sample CSV.
+- **Model Training:** Trains and evaluates three models:
+  - Linear Regression
+  - Multiple Linear Regression
+  - Artificial Neural Network (ANN) via MLPRegressor
+- **Metrics Visualization:** View MSE, MAE, R² Score with charts.
+- **Placement Package Prediction:** Predict using trained ANN model.
+
+---
+
+## Technologies Used
+
+- **Backend:** Python, Flask
+- **Machine Learning:** scikit-learn
+- **Visualization:** Matplotlib (Base64 encoded charts)
+- **Frontend:** HTML, Bootstrap, JavaScript
+
+---
+
+## Setup Instructions
+
+### Prerequisites
+
+- Python 3.7+
+- pip
+
+### Install Dependencies
 
 ```bash
-pip install scikit-learn matplotlib pandas numpy
+pip install flask pandas scikit-learn matplotlib
 ```
 
-## Getting Started
+### Folder Structure
 
-1. Clone the repository
+```plaintext
+project/
+├── app.py
+├── templates/
+│   ├── index.html
+│   └── predict.html
+├── static/
+│   └── sample_data.csv  # optional
+├── upload.js            # optional (used in advanced frontend)
+```
 
-2. Run the application
+### Run the Application
+
+```bash
+python app.py
+```
+
+The app will be accessible at `http://127.0.0.1:5000/`
+
+---
 
 ## Usage
 
-1. Load CSV File:
-   - Click the "Load CSV File" button to select a CSV file containing the placement data.
+1. **Homepage:**
+   - Upload your CSV file or use sample data.
 
-2. Run Analysis:
-   - After loading the CSV file, click the "Run Analysis" button to perform the analysis using Linear Regression, Multiple Linear Regression, and Artificial Neural Network.
+2. **Dataset Requirements:**
+   CSV must include these columns:
 
-## GUI Interface
+   - `cgpa`
+   - `12th_marks`
+   - `10th_marks`
+   - `communication_skill`
+   - `programming_skill`
+   - `number_of_internships`
+   - `number_of_projects`
+   - `number_of_backlog`
+   - `placement_package`
 
-The graphical user interface (GUI) allows users to interact with the application easily. It provides buttons to load a CSV file and run the analysis, as well as labels for displaying information and results.
+3. **Model Evaluation Page:**
+   - View MSE, MAE, R² for each model.
+   - Charts of actual vs. predicted values.
 
-## Results
+4. **Prediction Form:**
+   - Fill the form with your academic and skill details.
+   - Get predicted placement package in LPA.
 
-The results are displayed for each iteration, showing metrics such as Mean Squared Error (MSE), Mean Absolute Error (MAE), and R-squared for each machine learning model. The results are visualized using bar plots for easy comparison between Iteration 1 and Iteration 2.
+---
+
+## API Endpoints
+
+| Route            | Method | Description                               |
+|------------------|--------|-------------------------------------------|
+| `/`              | GET    | Home page (CSV upload UI)                 |
+| `/upload`        | POST   | Upload CSV and trigger training           |
+| `/upload_sample` | POST   | Load & train using sample CSV             |
+| `/predict_page`  | GET    | Shows metrics, plots, prediction form     |
+| `/predict`       | POST   | API to predict placement package (JSON)   |
+
+---
+
+## Author
+
+- [Your Name / GitHub](https://github.com/vaibhav2067)
+
+---
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the MIT License.
 
-## Acknowledgments
+---
 
-- This project uses the scikit-learn library for machine learning models.
-- The GUI is built using the tkinter library.
+## Note
 
-Feel free to customize this README file based on your specific project details and requirements.
+This is a prototype tool and should not be used for real-world decision-making without further validation and enhancement.
+
+---
+
+## Screenshot
+
+![Screenshot](static/screenshot.png)  <!-- Replace with actual screenshot path -->
