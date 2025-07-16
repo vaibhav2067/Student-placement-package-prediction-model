@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Evaluation & Prediction</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body class="bg-light">
+  <div class="container py-4">
+
+    <h1 class="mb-4 text-center">Model Evaluation Metrics & Prediction</h1>
+
+    {% for model_name, metric in metrics.items() %}
+    <div class="card shadow-sm mb-4">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">{{ model_name }}</h5>
+      </div>
+      <div class="card-body row">
+        <div class="col-md-6">
+          <ul class="list-group">
+            <li class="list-group-item"><strong>MSE:</strong> {{ metric['MSE']|round(4) }}</li>
+            <li class="list-group-item"><strong>MAE:</strong> {{ metric['MAE']|round(4) }}</li>
+            <li class="list-group-item"><strong>R² Score:</strong> {{ metric['R2']|round(4) }}</li>
+          </ul>
+          <div class="alert alert-info small mt-3">
+            {% if model_name == 'Linear Regression' %}
+              MSE below 5 is considered good.<br> MAE below 2 is generally acceptable.<br> R² near 1 indicates strong fit.
+            {% elif model_name == 'Multiple Linear Regression' %}
+              Similar to Linear Regression: lower MSE/MAE are better; R² near 1 indicates a good model.
+            {% elif model_name == 'ANN' %}
+              MSE varies with complexity, but lower is better.<br> R² above 0.85 typically indicates good performance.
+            {% endif %}
+          </div>
+        </div>
+        <div class="col-md-6 text-center">
+          <img src="data:image/png;base64,{{ plots[model_name] }}" class="img-fluid rounded shadow-sm" alt="{{ model_name }} Plot">
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+    <hr />
+
+    <h2 class="mb-3">Predict Your Placement Package</h2>
+    <form id="predict-form" class="row g-3">
+      <div class="col-md-3">
+        <label for="cgpa" class="form-label">CGPA</label>
+        <input type="number" step="0.01" min="0" max="10" class="form-control" id="cgpa" name="cgpa" required />
+      </div>
+      <div class="col-md-3">
+        <label for="12th_marks" class="form-label">12th Marks (%)</label>
+        <input type="number" step="0.01" min="0" max="100" class="form-control" id="12th_marks" name="12th_marks" required />
+      </div>
+      <div class="col-md-3">
+        <label for="10th_marks" class="form-label">10th Marks (%)</label>
+        <input type="number" step="0.01" min="0" max="100" class="form-control" id="10th_marks" name="10th_marks" required />
+      </div>
+      <div class="col-md-3">
+        <label for="communication_skill" class="form-label">Communication Skill (1-10)</label>
+        <input type="number" step="1" min="1" max="10" class="form-control" id="communication_skill" name="communication_skill" required />
+      </div>
+      <div class="col-md-3">
+        <label for="programming_skill" class="form-label">Programming Skill (1-10)</label>
+        <input type="number" step="1" min="1" max="10" class="form-control" id="programming_skill" name="programming_skill" required />
+      </div>
+      <div class="col-md-3">
+        <label for="number_of_internships" class="form-label">Number of Internships</label>
+        <input type="number" step="1" min="0" class="form-control" id="number_of_internships" name="number_of_internships" required />
+      </div>
+      <div class="col-md-3">
+        <label for="number_of_projects" class="form-label">Number of Projects</label>
+        <input type="number" step="1" min="0" class="form-control" id="number_of_projects" name="number_of_projects" required />
+      </div>
+      <div class="col-md-3">
+        <label for="number_of_backlog" class="form-label">Number of Backlogs</label>
+        <input type="number" step="1" min="0" class="form-control" id="number_of_backlog" name="number_of_backlog" required />
+      </div>
+
+      <div class="col-12 mt-3">
+        <button type="submit" class="btn btn-primary">Predict</button>
+      </div>
+    </form>
+
+    <div id="prediction-result" class="mt-4 alert alert-info d-none"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('predict-form');
+    const resultDiv = document.getElementById('prediction-result');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const data = {};
+      new FormData(form).forEach((value, key) => {
+        data[key] = isNaN(value) ? value : Number(value);
+      });
+
+      try {
+        const res = await fetch('/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+
+        const json = await res.json();
+        if (res.ok) {
+          resultDiv.textContent = `Predicted Placement Package: ₹ ${json.prediction} LPA`;
+          resultDiv.classList.remove('d-none', 'alert-danger');
+          resultDiv.classList.add('alert-info');
+        } else {
+          throw new Error(json.error || 'Prediction failed');
+        }
+      } catch (err) {
+        resultDiv.textContent = `Error: ${err.message}`;
+        resultDiv.classList.remove('d-none', 'alert-info');
+        resultDiv.classList.add('alert-danger');
+      }
+    });
+  </script>
+</body>
+</html>
